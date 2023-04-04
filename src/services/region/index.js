@@ -1,7 +1,4 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import Region from "../../template/region";
-import { Modal } from "../../molecule/modal";
 
 axios.defaults.baseURL = "http://localhost:8088/api/";
 

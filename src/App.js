@@ -1,5 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
+import Region from './components/template/region';
+import Regionpage from './components/page/region';
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
         </a>
       </header>
     </div>
+    // <Regionpage/>
   );
 }
 

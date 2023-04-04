@@ -4,8 +4,10 @@ import { Button } from '../../atom/button';
 import { ModalView } from '../../molecule/modal';
 import axios from "axios";
 import { useState, useEffect } from "react";
-import API from '../../services/region';
+import API from '../../../services/region';
 import Swal from "sweetalert2";
+import { fetchRegionAll, getregionall, selectCount } from '../../../features/region';
+import { useSelector, useDispatch } from 'react-redux';
 
 function Region(props){
     let style = {
@@ -14,16 +16,36 @@ function Region(props){
     const [alldataRegion, setallRegion] = useState(null);
     const [methodReq, setMethodReq] = useState("");
     const [regById, setRegionById] = useState(null);
+    const [httpStatus, setHttpStatus] = useState(null);
 
     const [showModal, setShowModal] = useState(false);
-    const handleClose = () => setShowModal(false);
+    const handleClose = () => {
+      setShowModal(false);
+    setRegionById(null);
+  };
     const handleShow = () => {
       setShowModal(true);
       setMethodReq("post");
     };
-    useEffect(() => {
-      getAllRegion();
-    }, []);
+    const dispatch = useDispatch();
+    //const regionData = useSelector(selectCount);
+    const regionDatac = props.regionDatanih;
+    const httpss = props.setHttpStatus;
+    // useEffect(() => {
+    //   API.getAllRegion().then((response) =>{
+    //     setallRegion(response.data);
+    //   });
+    //   return () =>{
+    //     setHttpStatus(null)
+    //   };
+    //   //getAllRegion();
+    // }, [httpStatus]);
+    // useEffect(() => {
+    //   dispatch(fetchRegionAll());
+    //   //getAllRegion();
+    // }, [dispatch]);
+    //console.log(regionDatac)
+    
 
     const getAllRegion = async () => {
       const response = await API.getAllRegion();
@@ -46,9 +68,8 @@ function Region(props){
               icon: "success",
               title: "Berhasil!",
               text: "Data berhasil dihapus!",
-            }).then(() => {
-              window.location.reload();
             })
+            props.setHttpStatus(result.status);
           });
         }
       });
@@ -73,8 +94,8 @@ function Region(props){
             </tr>
           </thead>
           <tbody>
-          {alldataRegion &&
-						alldataRegion.data.map((item, index) => {
+          {regionDatac &&
+						regionDatac.data.map((item, index) => {
 							return (
 								<tr key={index}>
 									<td>{index + 1}</td>
@@ -114,6 +135,7 @@ function Region(props){
 				hide={handleClose}
 				regById={regById}
 				methodReq={methodReq}
+        httpStatus={props.setHttpStatus}
 			/>
       </div>
     )

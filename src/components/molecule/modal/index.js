@@ -4,15 +4,16 @@ import { Input } from '../../atom/input';
 
 import { useState } from "react";
 import Swal from "sweetalert2";
-import API from '../../services/region';
+import API from '../../../services/region';
 import { Modal, Form, Button } from "react-bootstrap";
 
-export function ModalView({show, hide, regById, methodReq}){
+export function ModalView({show, hide, regById, methodReq, httpStatus}){
   const [name, setName] = useState("");
   const [closeModalAfterInsert, setCloseModalAfterInsert] = useState(true);
   const handleClose = () => {
-	window.location.reload();
+	// window.location.reload();
 	hide();
+
   }
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -26,30 +27,31 @@ export function ModalView({show, hide, regById, methodReq}){
     //   console.log(name)
 			API.saveRegion(name)
 				.then((res) => {
-					 setCloseModalAfterInsert(false);
+					hide();
 					setName("");
 					Swal.fire({
 						icon: "success",
 						title: "Berhasil!",
 						text: "Data berhasil ditambahkan!",
-					}).then(() =>{
-						window.location.reload();
-					});
+					})
+					httpStatus(res.status);
 				})
 				.catch((err) => {
 					console.log(err);
 				});
     }else if (methodReq === "put") {
 			API.updateRegion(regById.data.id, {name}).then((res) => {
-				setCloseModalAfterInsert(false);;
+				hide();
+				// setCloseModalAfterInsert(false);
 				setName("");
 				Swal.fire({
 					icon: "success",
 					title: "Berhasil!",
 					text: "Data berhasil diubah!",
 				}).then(() =>{
-					window.location.reload();
-				});
+				 });
+					httpStatus(res.status);
+				
 			})
 			.catch((err) =>{
 				console.log(err);
